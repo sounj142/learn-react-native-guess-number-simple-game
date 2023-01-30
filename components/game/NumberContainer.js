@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { View, Text, StyleSheet } from 'react-native';
 import { useStore } from '../../stores/store';
-import { Colors, Fonts } from '../../utils/constants';
+import { Colors, Fonts, FontSize, isSmallScreen } from '../../utils/constants';
 
 export default observer(function NumberContainer() {
   const { guessNumber } = useStore().gameStore;
@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
   guessNumberContainer: {
     marginTop: 24,
     alignItems: 'center',
-    padding: 24,
+    padding: isSmallScreen ? 12 : 24,
     borderRadius: 8,
     borderWidth: 4,
     borderColor: Colors.accent500,
   },
   guessNumber: {
-    fontSize: 36,
+    fontSize: FontSize.VeryLarge,
     color: Colors.accent500,
     fontFamily: Fonts.openSansBold,
   },

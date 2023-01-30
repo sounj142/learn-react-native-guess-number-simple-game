@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Colors } from '../../utils/constants';
+import { Colors, isSmallScreen } from '../../utils/constants';
 
 export default function Card({ children, style }) {
   return <View style={[styles.container, style]}>{children}</View>;
@@ -8,7 +8,7 @@ export default function Card({ children, style }) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginTop: 36,
+    marginTop: isSmallScreen ? 18 : 36,
     marginHorizontal: 24,
     padding: 16,
     backgroundColor: Colors.primary800,

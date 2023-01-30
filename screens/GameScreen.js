@@ -1,5 +1,12 @@
 import { observer } from 'mobx-react-lite';
-import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  FlatList,
+  useWindowDimensions,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/game/NumberContainer';
@@ -7,9 +14,11 @@ import Card from '../components/ui/Card';
 import PrimaryButton from '../components/ui/PrimaryButton';
 import Title from '../components/ui/Title';
 import { useStore } from '../stores/store';
-import { Colors, Fonts } from '../utils/constants';
+import { Colors, Fonts, FontSize } from '../utils/constants';
 
 export default observer(function GameScreen() {
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
   const {
     guessHistories,
     isLie,
@@ -28,22 +37,23 @@ export default observer(function GameScreen() {
     ]);
   }
 
-  return (
-    <View style={styles.screen}>
-      <Title>Opponent's Guess</Title>
+  let content;
+  if (isLandscape && width > 600) {
+    content = (
+      <>
+        {/* <Text style={[styles.question, styles.questionWide]}>
+          Higher or lower?
+        </Text> */}
 
-      <NumberContainer />
-
-      <Card style={{ marginHorizontal: 0 }}>
-        <Text style={styles.question}>Higher or lower?</Text>
-
-        <View style={styles.buttonsContainer}>
+        <View style={styles.buttonsContainerWide}>
           <PrimaryButton
             style={styles.button}
             onPress={userSaysGuessNumberIsLower}
           >
             <Ionicons name='md-remove' size={24} />
           </PrimaryButton>
+
+          <NumberContainer />
 
           <PrimaryButton
             style={styles.button}
@@ -52,7 +62,41 @@ export default observer(function GameScreen() {
             <Ionicons name='md-add' size={24} />
           </PrimaryButton>
         </View>
-      </Card>
+      </>
+    );
+  } else {
+    content = (
+      <>
+        <NumberContainer />
+
+        <Card style={{ marginHorizontal: 0 }}>
+          <Text style={styles.question}>Higher or lower?</Text>
+
+          <View style={styles.buttonsContainer}>
+            <PrimaryButton
+              style={styles.button}
+              onPress={userSaysGuessNumberIsLower}
+            >
+              <Ionicons name='md-remove' size={24} />
+            </PrimaryButton>
+
+            <PrimaryButton
+              style={styles.button}
+              onPress={userSaysGuessNumberIsHigher}
+            >
+              <Ionicons name='md-add' size={24} />
+            </PrimaryButton>
+          </View>
+        </Card>
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <Title style={{ width: '100%' }}>Opponent's Guess</Title>
+
+      {content}
 
       <View style={styles.guessesContainer}>
         <FlatList
@@ -79,16 +123,26 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 18,
     paddingTop: 32,
+    alignItems: 'center',
   },
   question: {
-    fontSize: 24,
+    fontSize: FontSize.Normal,
     fontFamily: Fonts.openSans,
     color: Colors.accent500,
     textAlign: 'center',
   },
+  questionWide: {
+    marginTop: 5,
+  },
   buttonsContainer: {
     flexDirection: 'row',
     marginTop: 10,
+  },
+  buttonsContainerWide: {
+    flexDirection: 'row',
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
     flex: 1,
@@ -115,6 +169,6 @@ const styles = StyleSheet.create({
   },
   guessItemText: {
     fontFamily: Fonts.openSans,
-    fontSize: 18,
+    fontSize: FontSize.Small,
   },
 });

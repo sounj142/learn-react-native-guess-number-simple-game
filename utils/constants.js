@@ -1,3 +1,5 @@
+import { Dimensions } from 'react-native';
+
 export const Colors = {
   primary500: '#72063c',
   primary600: '#640233',
@@ -9,4 +11,18 @@ export const Colors = {
 export const Fonts = {
   openSans: 'open-sans',
   openSansBold: 'open-sans-bold',
+};
+
+export const deviceWidth = Math.min(
+  Dimensions.get('window').width,
+  Dimensions.get('window').height
+);
+export const isSmallScreen = deviceWidth < 380;
+console.log('deviceWidth', deviceWidth);
+
+export const FontSize = {
+  VeryLarge: isSmallScreen ? 28 : 36,
+  Large: isSmallScreen ? 24 : 32,
+  Normal: isSmallScreen ? 18 : 24,
+  Small: isSmallScreen ? 14 : 18,
 };
